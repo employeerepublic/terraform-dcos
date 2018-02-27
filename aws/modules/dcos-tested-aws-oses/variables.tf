@@ -46,7 +46,11 @@ variable "aws_ami" {
  centos_7.4_ap-south-1          = "ami-82a3eaed"
  centos_7.4_eu-west-3           = "ami-0c60d771"
  centos_7.4_eu-west-2           = "ami-c8d7c9ac"
- centos_7.4_eu-west-1           = "ami-147fc16d"
+
+ # this is the yapster encrypted AMI
+ centos_7.4_eu-west-1           = "ami-c15015b8"
+
+ # centos_7.4_eu-west-1           = "ami-147fc16d"
  centos_7.4_ap-northeast-2      = "ami-53a1073d"
  centos_7.4_ap-northeast-1      = "ami-1b27a37d"
  centos_7.4_sa-east-1           = "ami-284d0a44"
