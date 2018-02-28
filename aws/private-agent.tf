@@ -11,6 +11,80 @@ resource "aws_instance" "agent" {
 
   root_block_device {
     volume_size = "${var.aws_agent_instance_disk_size}"
+    volume_type = "gp2"
+    volume_size = "8"
+  }
+
+  # /var/log
+  ebs_block_device {
+    device_name = "/dev/sde"
+    volume_type = "gp2"
+    volume_size = "20"
+    encrypted = "true"
+  }
+
+  # /var/lib/dcos
+  ebs_block_device {
+    device_name = "/dev/sdf"
+    volume_type = "gp2"
+    volume_size = "10"
+    encrypted = "true"
+  }
+
+  # /var/lib/mesos
+  ebs_block_device {
+    device_name = "/dev/sdg"
+    volume_type = "gp2"
+    volume_size = "50"
+    encrypted = "true"
+  }
+
+  # /var/lib/docker
+  ebs_block_device {
+    device_name = "/dev/sdh"
+    volume_type = "gp2"
+    volume_size = "200"
+    encrypted = "true"
+  }
+
+  # /dcos/volume0
+  ebs_block_device {
+    device_name = "/dev/sdm"
+    volume_type = "gp2"
+    volume_size = "100"
+    encrypted = "true"
+  }
+
+  # /dcos/volume1
+  ebs_block_device {
+    device_name = "/dev/sdn"
+    volume_type = "gp2"
+    volume_size = "100"
+    encrypted = "true"
+  }
+
+  # /dcos/volume2
+  ebs_block_device {
+    device_name = "/dev/sdo"
+    volume_type = "gp2"
+    volume_size = "100"
+    encrypted = "true"
+  }
+
+  # /dcos/volume3
+  ebs_block_device {
+    device_name = "/dev/sdp"
+    volume_type = "gp2"
+    volume_size = "100"
+    encrypted = "true"
+  }
+
+  # /dcos/volume4
+  ebs_block_device {
+    device_name = "/dev/sdq"
+    volume_type = "gp2"
+    volume_size = "250"
+    encrypted = "true"
   }
 
   count = "${var.num_of_private_agents}"
@@ -42,6 +116,25 @@ resource "aws_instance" "agent" {
   # backend instances.
   subnet_id = "${aws_subnet.private.id}"
 
+  provisioner "file" {
+    source = "scripts/cloud/aws/dcos_vol_setup.sh"
+    destination = "/tmp/dcos_vol_setup.sh"
+  }
+
+  provisioner "file" {
+    source = "scripts/cloud/aws/setup_private_agent_mounts.sh"
+    destination = "/tmp/setup_mounts.sh"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "sudo cp /tmp/dcos_vol_setup.sh /usr/local/sbin/dcos_vol_setup.sh",
+      "sudo chmod +x /usr/local/sbin/dcos_vol_setup.sh",
+      "sudo chmod +x /tmp/setup_mounts.sh",
+      "sudo bash /tmp/setup_mounts.sh",
+    ]
+  }
+
   # OS init script
   provisioner "file" {
    content = "${module.aws-tested-oses.os-setup}"
@@ -51,7 +144,7 @@ resource "aws_instance" "agent" {
  # We run a remote provisioner on the instance after creating it.
   # In this case, we just install nginx and start it. By default,
   # this should be on port 80
-    provisioner "remote-exec" {
+  provisioner "remote-exec" {
     inline = [
       "sudo chmod +x /tmp/os-setup.sh",
       "sudo bash /tmp/os-setup.sh",

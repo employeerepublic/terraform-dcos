@@ -53,6 +53,40 @@ resource "aws_instance" "public-agent" {
 
   root_block_device {
     volume_size = "${var.aws_public_agent_instance_disk_size}"
+    volume_type = "gp2"
+    volume_size = "8"
+  }
+
+  # /var/log
+  ebs_block_device {
+    device_name = "/dev/sde"
+    volume_type = "gp2"
+    volume_size = "20"
+    encrypted = "true"
+  }
+
+  # /var/lib/dcos
+  ebs_block_device {
+    device_name = "/dev/sdf"
+    volume_type = "gp2"
+    volume_size = "10"
+    encrypted = "true"
+  }
+
+  # /var/lib/mesos
+  ebs_block_device {
+    device_name = "/dev/sdg"
+    volume_type = "gp2"
+    volume_size = "50"
+    encrypted = "true"
+  }
+
+  # /var/lib/docker
+  ebs_block_device {
+    device_name = "/dev/sdh"
+    volume_type = "gp2"
+    volume_size = "200"
+    encrypted = "true"
   }
 
   count = "${var.num_of_public_agents}"
@@ -83,6 +117,25 @@ resource "aws_instance" "public-agent" {
   # environment it's more common to have a separate private subnet for
   # backend instances.
   subnet_id = "${aws_subnet.public.id}"
+
+  provisioner "file" {
+    source = "scripts/cloud/aws/dcos_vol_setup.sh"
+    destination = "/tmp/dcos_vol_setup.sh"
+  }
+
+  provisioner "file" {
+    source = "scripts/cloud/aws/setup_public_agent_mounts.sh"
+    destination = "/tmp/setup_mounts.sh"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "sudo cp /tmp/dcos_vol_setup.sh /usr/local/sbin/dcos_vol_setup.sh",
+      "sudo chmod +x /usr/local/sbin/dcos_vol_setup.sh",
+      "sudo chmod +x /tmp/setup_mounts.sh",
+      "sudo bash /tmp/setup_mounts.sh",
+    ]
+  }
 
   # OS init script
   provisioner "file" {
