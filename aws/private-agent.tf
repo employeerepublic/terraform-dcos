@@ -151,6 +151,18 @@ resource "aws_instance" "agent" {
     ]
   }
 
+  # setting this up to be run after DC/OS has been installed...
+  # it needs to be able to change some of the DC/OS config files
+  provisioner "file" {
+    source = "scripts/os/centos/centos-dcos-postinstall.sh"
+    destination = "/tmp/os-dcos-postinstall.sh"
+  }
+  provisioner "remote-exec" {
+    inline = [
+      "sudo chmod +x /tmp/os-dcos-postinstall.sh",
+    ]
+  }
+
   lifecycle {
     ignore_changes = ["tags.Name"]
   }
@@ -198,10 +210,12 @@ resource "null_resource" "agent" {
   }
 
   # Install Slave Node
+  # - run the postinstall script
   provisioner "remote-exec" {
     inline = [
       "sudo chmod +x run.sh",
       "sudo ./run.sh",
+      "sudo bash /tmp/os-dcos-postinstall.sh",
     ]
   }
 }

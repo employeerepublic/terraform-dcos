@@ -143,13 +143,25 @@ resource "aws_instance" "public-agent" {
    destination = "/tmp/os-setup.sh"
    }
 
- # We run a remote provisioner on the instance after creating it.
+  # We run a remote provisioner on the instance after creating it.
   # In this case, we just install nginx and start it. By default,
   # this should be on port 80
-    provisioner "remote-exec" {
+  provisioner "remote-exec" {
     inline = [
       "sudo chmod +x /tmp/os-setup.sh",
       "sudo bash /tmp/os-setup.sh",
+    ]
+  }
+
+  # setting this up to be run after DC/OS has been installed...
+  # it needs to be able to change some of the DC/OS config files
+  provisioner "file" {
+    source = "scripts/os/centos/centos-dcos-postinstall.sh"
+    destination = "/tmp/os-dcos-postinstall.sh"
+  }
+  provisioner "remote-exec" {
+    inline = [
+      "sudo chmod +x /tmp/os-dcos-postinstall.sh",
     ]
   }
 
@@ -201,10 +213,12 @@ resource "null_resource" "public-agent" {
   }
 
   # Install Slave Node
+  # - and run the postinstall script
   provisioner "remote-exec" {
     inline = [
       "sudo chmod +x run.sh",
       "sudo ./run.sh",
+      "sudo bash /tmp/os-dcos-postinstall.sh",
     ]
   }
 }
