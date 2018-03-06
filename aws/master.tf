@@ -141,7 +141,7 @@ resource "aws_instance" "master" {
   ebs_block_device {
     device_name = "/dev/sdf"
     volume_type = "gp2"
-    volume_size = "10"
+    volume_size = "50"
     encrypted = "true"
   }
 
@@ -153,13 +153,13 @@ resource "aws_instance" "master" {
   #   encrypted = "true"
   # }
 
-  # # /var/lib/docker
-  # ebs_block_device {
-  #   device_name = "/dev/sdh"
-  #   volume_type = "gp2"
-  #   volume_size = "200"
-  #   encrypted = "true"
-  # }
+  # /var/lib/docker
+  ebs_block_device {
+    device_name = "/dev/sdh"
+    volume_type = "gp2"
+    volume_size = "50"
+    encrypted = "true"
+  }
 
   count = "${var.num_of_masters}"
   instance_type = "${var.aws_master_instance_type}"

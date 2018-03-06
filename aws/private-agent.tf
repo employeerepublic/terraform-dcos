@@ -27,7 +27,7 @@ resource "aws_instance" "agent" {
   ebs_block_device {
     device_name = "/dev/sdf"
     volume_type = "gp2"
-    volume_size = "10"
+    volume_size = "50"
     encrypted = "true"
   }
 
