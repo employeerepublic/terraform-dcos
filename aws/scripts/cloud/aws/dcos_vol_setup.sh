@@ -87,6 +87,14 @@ function main {
       checked_mount "$device" "$mount_location"
       systemd-tmpfiles --create --prefix /var/log/journal
       systemctl kill --signal=SIGUSR1 systemd-journald
+    elif [ "$mount_location" = "/home/centos" ]; then
+      noncritical echo "Preparing $device by migrating files from $mount_location"
+      mkdir -p /var/mount-prep
+      mount "$device" /var/mount-prep
+      cp -a "${mount_location}/." /var/mount-prep/
+      umount /var/mount-prep
+      rmdir /var/mount-prep
+      checked_mount "$device" "$mount_location"
     else
       checked_mount "$device" "$mount_location"
     fi
