@@ -47,6 +47,14 @@ resource "aws_instance" "agent" {
     encrypted = "true"
   }
 
+  # /home/centos
+  ebs_block_device {
+    device_name = "/dev/sdi"
+    volume_type = "gp2"
+    volume_size = "50"
+    encrypted = "true"
+  }
+
   # /dcos/volume0
   ebs_block_device {
     device_name = "/dev/sdm"

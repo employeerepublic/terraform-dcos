@@ -161,6 +161,14 @@ resource "aws_instance" "master" {
     encrypted = "true"
   }
 
+  # /home/centos
+  ebs_block_device {
+    device_name = "/dev/sdi"
+    volume_type = "gp2"
+    volume_size = "50"
+    encrypted = "true"
+  }
+
   count = "${var.num_of_masters}"
   instance_type = "${var.aws_master_instance_type}"
   iam_instance_profile = "${aws_iam_instance_profile.master.name}"

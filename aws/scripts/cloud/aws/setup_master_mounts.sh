@@ -16,6 +16,7 @@ Type=oneshot
 ExecStart=/usr/local/sbin/dcos_vol_setup.sh /dev/xvde /var/log
 ExecStart=/usr/local/sbin/dcos_vol_setup.sh /dev/xvdf /var/lib/dcos
 ExecStart=/usr/local/sbin/dcos_vol_setup.sh /dev/xvdh /var/lib/docker
+ExecStart=/usr/local/sbin/dcos_vol_setup.sh /dev/xvdi /home/centos
 
 [Install]
 RequiredBy=local-fs-pre.target

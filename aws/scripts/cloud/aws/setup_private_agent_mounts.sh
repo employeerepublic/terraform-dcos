@@ -17,6 +17,7 @@ ExecStart=/usr/local/sbin/dcos_vol_setup.sh /dev/xvde /var/log
 ExecStart=/usr/local/sbin/dcos_vol_setup.sh /dev/xvdf /var/lib/dcos
 ExecStart=/usr/local/sbin/dcos_vol_setup.sh /dev/xvdg /var/lib/mesos
 ExecStart=/usr/local/sbin/dcos_vol_setup.sh /dev/xvdh /var/lib/docker
+ExecStart=/usr/local/sbin/dcos_vol_setup.sh /dev/xvdi /home/centos
 ExecStart=/usr/local/sbin/dcos_vol_setup.sh /dev/xvdm /dcos/volume0
 ExecStart=/usr/local/sbin/dcos_vol_setup.sh /dev/xvdn /dcos/volume1
 ExecStart=/usr/local/sbin/dcos_vol_setup.sh /dev/xvdo /dcos/volume2
