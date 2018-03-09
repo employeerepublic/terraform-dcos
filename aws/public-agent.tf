@@ -54,7 +54,6 @@ resource "aws_instance" "public-agent" {
   root_block_device {
     volume_size = "${var.aws_public_agent_instance_disk_size}"
     volume_type = "gp2"
-    volume_size = "8"
   }
 
   # /var/log

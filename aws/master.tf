@@ -126,7 +126,6 @@ resource "aws_instance" "master" {
   root_block_device {
     volume_size = "${var.aws_master_instance_disk_size}"
     volume_type = "gp2"
-    volume_size = "8"
   }
 
   # /var/log

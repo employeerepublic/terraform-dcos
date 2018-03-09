@@ -477,3 +477,22 @@ variable "kubernetes_cluster" {
  default = "kubernetes-cluster"
  description = "Kubernetes cluster tag"
 }
+
+##########################
+## yapster stuff
+##########################
+
+variable "num_of_storage_instances" {
+  description = "storage instance count"
+  default = 3
+}
+
+variable "aws_storage_instance_type" {
+  description = "AWS storage instance type"
+  default = "m4.2xlarge"
+}
+
+variable "aws_storage_instance_disk_size" {
+  description = "AWS storage instance disk size"
+  default = "250"
+}

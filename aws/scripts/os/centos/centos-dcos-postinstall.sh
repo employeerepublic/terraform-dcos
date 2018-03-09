@@ -39,9 +39,13 @@ echo never | sudo tee /sys/kernel/mm/transparent_hugepage/defrag
 
 ### dc/os has a bad sysctl in its own config - fix it
 
-cat /opt/mesosphere/etc/dcos-service-configuration.json | \
-    sudo sed 's%"vm.max_map_count": *[0-9][0-9]*%"vm.max_map_count":1048575%g' > /tmp/dcos-service-configuration.json
+if [ -f "/opt/mesosphere/etc/dcos-service-configuration.json" ] ; then
 
-sudo cp /tmp/dcos-service-configuration.json /opt/mesosphere/etc/dcos-service-configuration.json
+   cat /opt/mesosphere/etc/dcos-service-configuration.json | \
+       sudo sed 's%"vm.max_map_count": *[0-9][0-9]*%"vm.max_map_count":1048575%g' > /tmp/dcos-service-configuration.json
+
+   sudo cp /tmp/dcos-service-configuration.json /opt/mesosphere/etc/dcos-service-configuration.json
+
+fi
 
 ###### END DC/OS config

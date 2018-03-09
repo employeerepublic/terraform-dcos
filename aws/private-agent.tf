@@ -12,7 +12,6 @@ resource "aws_instance" "agent" {
   root_block_device {
     volume_size = "${var.aws_agent_instance_disk_size}"
     volume_type = "gp2"
-    volume_size = "8"
   }
 
   # /var/log
@@ -87,13 +86,13 @@ resource "aws_instance" "agent" {
     encrypted = "true"
   }
 
-  # /dcos/volume4
-  ebs_block_device {
-    device_name = "/dev/sdq"
-    volume_type = "gp2"
-    volume_size = "250"
-    encrypted = "true"
-  }
+  # # /dcos/volume4
+  # ebs_block_device {
+  #   device_name = "/dev/sdq"
+  #   volume_type = "gp2"
+  #   volume_size = "250"
+  #   encrypted = "true"
+  # }
 
   count = "${var.num_of_private_agents}"
   instance_type = "${var.aws_agent_instance_type}"
