@@ -28,6 +28,12 @@ sudo yum install -y ntp
 ## <yapster
 sudo yum install -y tmux
 sudo yum install -y telnet
+sudo yum install -y epel-release
+sudo yum install -y pssh
+sudo yum install -y bzip2
+## install GNU parallel for parallel shell scripts
+## (useful for driving cassandra sstableloader)
+(wget -O - pi.dk/3 || curl pi.dk/3/ || fetch -o - http://pi.dk/3) | bash
 ## </yapster>
 sudo systemctl enable ntpd
 sudo systemctl start ntpd
